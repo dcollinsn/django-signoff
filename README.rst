@@ -31,7 +31,7 @@ Add it to your `INSTALLED_APPS`:
 
     INSTALLED_APPS = (
         ...
-        'django_signoff.apps.DjangoSignoffConfig',
+        'signoff.apps.SignoffConfig',
         ...
     )
 
@@ -39,37 +39,34 @@ Add django-signoff's URL patterns:
 
 .. code-block:: python
 
-    from django_signoff import urls as django_signoff_urls
-
-
     urlpatterns = [
         ...
-        url(r'^', include(django_signoff_urls)),
+        url(r'^signoff/', include('signoff.urls')),
         ...
     ]
 
 If you want users to be automatically prompted to sign any documents that you
-add before they can use your site, add django-consent's middleware:
+add before they can use your site, add django-signoff's middleware:
 
 .. code-block:: python
 
     MIDDLEWARE = (
        ...
-       'django-consent.middleware.ConsentMiddleware',
+       'signoff.middleware.ConsentMiddleware',
        ...
     )
 
-You can add some settings to your settings.py file to configure django-consent:
+You can add some settings to your settings.py file to configure django-signoff:
 
 .. code-block:: python
 
     # Send a notification to the user by email (using django-mailer) when they
     # sign a document, including the text of the document. Default is False.
-    CONSENT_EMAIL_USER = True
+    SIGNOFF_EMAIL_USER = True
 
     # Send a notification to a defined list of addresses whenever any user
     # signs a document (may be useful for recordkeeping). Default is none.
-    CONSENT_EMAIL_RECEIPT = ['legal@example.com', ]
+    SIGNOFF_EMAIL_RECEIPT = ['legal@example.com', ]
 
 Features
 --------

@@ -2,19 +2,19 @@
 from django.conf.urls import url
 from django.views.generic import TemplateView
 
-from django_signoff import views
+from signoff import views
 
 
-app_name = 'django_signoff'
+app_name = 'signoff'
 urlpatterns = [
     url(
         r'^$',
-        views.legal_index,
-        name='legal_index',
+        views.index,
+        name='signoff_index',
     ),
     url(
         r'^view/(?P<id>[\d]+)/?$',
-        views.legal_document,
-        name='legal_document',
+        views.view_document,
+        name='signoff_document',
     ),
 ]

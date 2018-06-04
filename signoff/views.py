@@ -2,21 +2,21 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
-from django_signoff.models import Document, DocumentConsent
+from signoff.models import Document, DocumentConsent
 
 
 @login_required
-def consent_index(request):
+def index(request):
     context = {}
     context['documents'] = Document.objects.with_user(request.user).all()
     context['current_documents'] = Document.objects.with_user(request.user)\
                                            .only_active()
 
-    return render(request, 'django_signoff/index.html', context)
+    return render(request, 'signoff/index.html', context)
 
 
 @login_required
-def consent_document(request, id):
+def view_document(request, id):
     document = get_object_or_404(Document.objects.with_user(request.user),
                                  id=id)
 
@@ -31,7 +31,7 @@ def consent_document(request, id):
             )
             consent.save()
 
-        return redirect('consent_index')
+        return redirect('signoff:signoff_index')
 
     context = {}
     context['document'] = document
@@ -39,4 +39,4 @@ def consent_document(request, id):
     if document.user_consents:
         context['consent'] = document.user_consents[0]
 
-    return render(request, 'django_signoff/document.html', context)
+    return render(request, 'signoff/document.html', context)
