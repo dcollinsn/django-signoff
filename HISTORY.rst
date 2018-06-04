@@ -6,4 +6,4 @@ History
 0.1.0 (2018-06-03)
 ++++++++++++++++++
 
-* First release on PyPI.
+* Initial release, demonstration of models and core logic
