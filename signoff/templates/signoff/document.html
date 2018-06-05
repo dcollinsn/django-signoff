@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+    {{ document.name }}
+{% endblock %}
+
+{% block content_title %}
+    {{ document.name }}
+{% endblock %}
+
+{% block content %}
+
+<p>{{ document.details }}</p>
+
+{{ document.text|safe }}
+
+{% if request.user.is_authenticated %}
+<h2>{% trans "Signature" %}</h2>
+
+{% if document.user_consents %}
+    {% blocktrans with name=document.user_consents.0.signed_name date=document.user_consents.0.created %}
+        Signed on {{ date }} by {{ name }}
+    {% endblocktrans %}
+{% else %}
+    {% blocktrans %}
+        If you agree with the terms above, please complete the form below.
+    {% endblocktrans %}
+    <form method="post" action="">{% csrf_token %}<fieldset>
+        <dl>
+            <dt>
+                {% trans "Digital Signature" %}
+                {% if name_error %}
+                    <br><span class="error">{% trans "Your signature could not be accepted. The name you signed did not match your user account's display name." %}</span>
+                {% endif %}
+            </dt>
+            <dd>
+                <input type="text" name="name"><br>
+                {{ request.user.get_full_name }}
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                {% trans "Have you read and understood this document, and do you agree to be bound by it?" %}
+                {% if checkbox_error %}
+                    <br><span class="error">{% trans "Your signature could not be accepted. You did not agree to sign this document." %}</span>
+                {% endif %}
+            </dt>
+            <dd><input type="checkbox" name="consent_checkbox">{% trans "I agree" %}</dd>
+        </dl>
+    </fieldset>
+    <input type="submit" value="{% trans "Submit" %}">
+    </form>
+{% endif %}
+
+{% endif %}
+
+{% endblock %}

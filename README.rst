@@ -68,6 +68,30 @@ You can add some settings to your settings.py file to configure django-signoff:
     # signs a document (may be useful for recordkeeping). Default is none.
     SIGNOFF_EMAIL_RECEIPT = ['legal@example.com', ]
 
+    # We don't delete signatures from your database, for compliance reasons.
+    # However, we do require new signatures whenever a new version of a
+    # document is created by creating a new object and setting the
+    # `prev_version` field. You can also require new signatures whenever a
+    # document is edited in the admin (we check the `updated` field of
+    # the document, and only accept newer signatures):
+    SIGNOFF_CHECK_DOCUMENT_UPDATED = True
+
+    # You can also require new signatures whenever a user's display name
+    # changes (we require users to enter their display name when signing
+    # a document):
+    SIGNOFF_CHECK_FULL_NAME = True
+
+    # If you're using the middleware, it will redirect any logged-in requests
+    # from users who owe signatures to the 'legal' index by default, except
+    # for requests within the 'signoff' app (to avoid redirect loops), and
+    # requests to the 'auth_logout' url name (to allow users to log out
+    # of the site). If you want to add additional URLs that can be accessed
+    # by users who have not signed your documents yet, you can do something
+    # like the following:
+    SIGNOFF_ADDITIONAL_ALLOWED_APPS = ('djdt', )
+    SIGNOFF_ADDITIONAL_ALLOWED_URLS = ('auth_logout', )
+    # (The latter is only an example, 'auth_logout' is automatically allowed.)
+
 Features
 --------
 

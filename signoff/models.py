@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import Q, Prefetch
+from django.db.models import F, Q, Prefetch
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
@@ -26,6 +27,11 @@ class DocumentConsent(TimeStampedModel):
                     "signed."),
     )
 
+    signed_name = models.TextField(
+        help_text=_("The name entered in the signature box when the user "
+                    "signed this document."),
+    )
+
 
 class DocumentQuerySet(models.QuerySet):
     def only_active(self):
@@ -40,9 +46,20 @@ class DocumentQuerySet(models.QuerySet):
         key "user_consents".
         """
 
+        kwargs = {}
+        if hasattr(settings, 'SIGNOFF_CHECK_DOCUMENT_UPDATED') and\
+           settings.SIGNOFF_CHECK_DOCUMENT_UPDATED:
+            kwargs['created__gte'] = F('document__modified')
+        if hasattr(settings, 'SIGNOFF_CHECK_FULL_NAME') and\
+           settings.SIGNOFF_CHECK_FULL_NAME:
+            kwargs['signed_name'] = user.get_full_name()
+
         return self.prefetch_related(Prefetch(
             "consents",
-            queryset=DocumentConsent.objects.filter(user=user),
+            queryset=DocumentConsent.objects.filter(
+                user=user,
+                **kwargs
+            ),
             to_attr="user_consents",
         ))
 

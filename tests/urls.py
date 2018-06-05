@@ -5,5 +5,5 @@ from django.conf.urls import url, include
 
 
 urlpatterns = [
-    url(r'^', include('django_signoff.urls', namespace='django_signoff')),
+    url(r'^signoff/', include('signoff.urls')),
 ]

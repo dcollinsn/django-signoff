@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Review Documents" %}
+{% endblock %}
+
+{% block content_title %}
+    {% trans "Review Documents" %}
+{% endblock %}
+
+{% block content %}
+
+<p>
+{% blocktrans %}
+    These documents govern your use of this web site. Please read them carefully.
+{% endblocktrans %}
+</p>
+
+{% if request.user.is_authenticated %}
+<p>
+{% blocktrans %}
+    If you were redirected here instead of to another page you intended to visit,
+    it is probably because either these documents, or your user account, have
+    recently been updated, and we need updated signatures from you before we
+    proceed.
+{% endblocktrans %}
+</p>
+{% endif %}
+
+<table>
+    <thead>
+        <tr>
+            {% if request.user.is_authenticated %}
+                <th>{% trans "View/Sign" %}</th>
+            {% else %}
+                <th>{% trans "View" %}</th>
+            {% endif %}
+            <th>{% trans "Document Name" %}</th>
+            <th>{% trans "Last Updated" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for document in current_documents %}
+            <tr class="signoff-document-row-odd">
+                <td class="signoff-column-min
+                    {% if request.user.is_authenticated %}
+                        {% if document.user_consents %}
+                            signoff-document-signed
+                        {% else %}
+                            signoff-document-unsigned
+                        {% endif %}
+                    {% endif %}
+                "><a href="{% url "signoff:signoff_document" id=document.id %}">
+                    {% if request.user.is_authenticated %}
+                        {% if document.user_consents %}
+                            [{% trans "View Signed Document" %}]
+                        {% else %}
+                            [{% trans "Review/Signature Required" %}]
+                        {% endif %}
+                    {% else %}
+                        [{% trans "View" %}]
+                    {% endif %}
+                </a></td>
+                <td>{{ document.name }}</td>
+                <td>{{ document.created }}</td>
+            </tr>
+            <tr class="signoff-document-row-even">
+                <td colspan="3">
+                    <p>{{ document.details }}</p>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

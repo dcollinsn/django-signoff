@@ -10,7 +10,7 @@ Tests for `django-signoff` models module.
 
 from django.test import TestCase
 
-from django_signoff import models
+from signoff import models
 
 
 class TestDjango_signoff(TestCase):

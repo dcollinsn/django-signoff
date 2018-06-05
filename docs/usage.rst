@@ -8,7 +8,7 @@ To use django-signoff in a project, add it to your `INSTALLED_APPS`:
 
     INSTALLED_APPS = (
         ...
-        'django_signoff.apps.DjangoSignoffConfig',
+        'signoff.apps.SignoffConfig',
         ...
     )
 
@@ -16,11 +16,19 @@ Add django-signoff's URL patterns:
 
 .. code-block:: python
 
-    from django_signoff import urls as django_signoff_urls
-
-
     urlpatterns = [
         ...
-        url(r'^', include(django_signoff_urls)),
+        url(r'^signoff/', include('signoff.urls')),
         ...
     ]
+
+If you want users to be automatically prompted to sign any documents that you
+add before they can use your site, add django-signoff's middleware:
+
+.. code-block:: python
+
+    MIDDLEWARE = (
+       ...
+       'signoff.middleware.ConsentMiddleware',
+       ...
+    )

@@ -22,12 +22,11 @@ INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sites",
-    "django_signoff",
+    "signoff.apps.SignoffConfig",
 ]
 
 SITE_ID = 1
 
-if django.VERSION >= (1, 10):
-    MIDDLEWARE = ()
-else:
-    MIDDLEWARE_CLASSES = ()
+MIDDLEWARE = (
+    'signoff.middleware.ConsentMiddleware',
+)

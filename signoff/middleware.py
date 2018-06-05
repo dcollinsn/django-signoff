@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import redirect
 from django.urls import resolve
 from django.utils import timezone
@@ -15,7 +16,17 @@ class ConsentMiddleware(MiddlewareMixin):
     def process_request(self, request):
         if hasattr(request, 'user') and request.user.is_authenticated:
             # Check if the user is on one of our pages, if so, pass
-            if resolve(request.path).app_name == 'signoff':
+            resolved_url = resolve(request.path)
+            allowed_apps = ['signoff']
+            allowed_urls = ['auth_logout']
+            if hasattr(settings, 'SIGNOFF_ADDITIONAL_ALLOWED_APPS'):
+                allowed_apps.extend(settings.SIGNOFF_ADDITIONAL_ALLOWED_APPS)
+            if hasattr(settings, 'SIGNOFF_ADDITIONAL_ALLOWED_URLS'):
+                allowed_urls.extend(settings.SIGNOFF_ADDITIONAL_ALLOWED_URLS)
+
+            if resolved_url.app_name in allowed_apps:
+                return
+            if resolved_url.url_name in allowed_urls:
                 return
 
             # Check if the user owes us any signatures, if so:
