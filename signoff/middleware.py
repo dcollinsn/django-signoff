@@ -17,6 +17,7 @@ class ConsentMiddleware(MiddlewareMixin):
         if hasattr(request, 'user') and request.user.is_authenticated:
             # Check if the user is on one of our pages, if so, pass
             resolved_url = resolve(request.path)
+
             allowed_apps = ['signoff']
             allowed_urls = ['auth_logout']
             if hasattr(settings, 'SIGNOFF_ADDITIONAL_ALLOWED_APPS'):

@@ -60,13 +60,16 @@ You can add some settings to your settings.py file to configure django-signoff:
 
 .. code-block:: python
 
-    # Send a notification to the user by email (using django-mailer) when they
-    # sign a document, including the text of the document. Default is False.
+    # Send a notification to the user by email (using your default email
+    # backend) when they sign a document, including the text of the document.
+    # Default is False.
     SIGNOFF_EMAIL_USER = True
+    SIGNOFF_EMAIL_FROM = 'legal@example.com'
+    SIGNOFF_EMAIL_REPLY_TO = ('legal@example.com', )
 
     # Send a notification to a defined list of addresses whenever any user
     # signs a document (may be useful for recordkeeping). Default is none.
-    SIGNOFF_EMAIL_RECEIPT = ['legal@example.com', ]
+    SIGNOFF_EMAIL_RECEIPT = ('legal@example.com', )
 
     # We don't delete signatures from your database, for compliance reasons.
     # However, we do require new signatures whenever a new version of a

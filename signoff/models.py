@@ -32,6 +32,9 @@ class DocumentConsent(TimeStampedModel):
                     "signed this document."),
     )
 
+    class Meta:
+        unique_together = (("document", "user", "signed_name"), )
+
 
 class DocumentQuerySet(models.QuerySet):
     def only_active(self):
@@ -54,6 +57,9 @@ class DocumentQuerySet(models.QuerySet):
            settings.SIGNOFF_CHECK_FULL_NAME:
             kwargs['signed_name'] = user.get_full_name()
 
+        # I think this is wrong - this doesn't check the document that the
+        # consents are linked to. We want to use some sort of annotate, I
+        # think.
         return self.prefetch_related(Prefetch(
             "consents",
             queryset=DocumentConsent.objects.filter(
@@ -113,3 +119,4 @@ class Document(TimeStampedModel):
 
     class Meta:
         ordering = ['order']
+        unique_together = (('code', 'prev_version'), )

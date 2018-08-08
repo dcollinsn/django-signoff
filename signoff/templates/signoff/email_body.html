@@ -1,0 +1,18 @@
+{{ user.get_full_name }},
+
+This message is to provide you a record of a document that you have reviewed
+and agreed to. The details are below:
+
+Document: {{ document.name }}
+{{ document.details }}
+Signed by: {{ user.get_full_name }} (username: {{ user.username }})
+Signed on: {{ instance.created }}
+
+For your reference, the document text is available below.
+
+If you have any questions, please utilize your usual support channels. This
+mail may not have been sent from a mailbox that is able to receive replies.
+
+----
+
+{{ document.text }}
