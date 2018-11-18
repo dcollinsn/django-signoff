@@ -2,22 +2,40 @@
 
 language: python
 
-python:
-  - "3.6"
-
-env: 
-  - TOX_ENV=py36-django-20
-  - TOX_ENV=py35-django-20
-  - TOX_ENV=py34-django-20
-
 matrix:
   fast_finish: true
+  include:
+    - python: 3.4
+      env: TOXENV=py34-dj20
+    - python: 3.5
+      env: TOXENV=py35-dj20
+    - python: 3.5
+      env: TOXENV=py35-dj21
+    - python: 3.6
+      env: TOXENV=py36-dj20
+    - python: 3.6
+      env: TOXENV=py36-dj21
+    - python: 3.7
+      env: TOXENV=py37-dj20
+      dist: xenial
+      sudo: yes
+    - python: 3.7
+      env: TOXENV=py37-dj21
+      dist: xenial
+      sudo: yes
+    - python: 3.7
+      env: TOXENV=py37-djmaster
+      dist: xenial
+      sudo: yes
+  allow_failures:
+    - env: TOXENV=py37-djmaster
 
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-install: pip install -r requirements_test.txt
+install:
+  - pip install -r requirements_test.txt
 
 # command to run tests using coverage, e.g. python setup.py test
-script: tox -e $TOX_ENV
+script: tox -v
 
 after_success:
-  - codecov -e TOX_ENV
+  - codecov
