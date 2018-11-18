@@ -18,7 +18,7 @@ def handle_signoff_emails(instance, created, **kwargs):
     # Collect recipients based on site settings
     if hasattr(settings, 'SIGNOFF_EMAIL_USER') and\
        settings.SIGNOFF_EMAIL_USER:
-        message.to = (instance.user.email,)
+        message.to = [instance.user.email, ]
 
     if hasattr(settings, 'SIGNOFF_EMAIL_RECEIPT') and\
        settings.SIGNOFF_EMAIL_RECEIPT:
@@ -50,12 +50,12 @@ def handle_signoff_emails(instance, created, **kwargs):
     message.subject = render_to_string(
         'signoff/email_subject.txt',
         context=template_context,
-    )
+    ).strip()
 
     html_body = render_to_string(
         'signoff/email_body.html',
         context=template_context,
-    )
+    ).strip()
 
     message.body = html_body
     message.attach_alternative(html_body, 'text/html')

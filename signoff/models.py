@@ -117,6 +117,9 @@ class Document(TimeStampedModel):
 
     objects = DocumentQuerySet.as_manager()
 
+    def __str__(self):
+        return '%s (#%d)' % (self.name, self.id)
+
     class Meta:
         ordering = ['order']
         unique_together = (('code', 'prev_version'), )

@@ -65,7 +65,7 @@ You can add some settings to your settings.py file to configure django-signoff:
     # Default is False.
     SIGNOFF_EMAIL_USER = True
     SIGNOFF_EMAIL_FROM = 'legal@example.com'
-    SIGNOFF_EMAIL_REPLY_TO = ('legal@example.com', )
+    SIGNOFF_EMAIL_REPLY_TO = ['legal@example.com', ]
 
     # Send a notification to a defined list of addresses whenever any user
     # signs a document (may be useful for recordkeeping). Default is none.
